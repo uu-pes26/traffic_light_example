@@ -30,10 +30,10 @@ You can build all three examples by issuing the following commands on a terminal
 mkdir build
 cd build
 cmake .. 
-make 
+make -j4
 ``` 
 
-If the build fails, double check if you have installed the Pico C/C++ SDK correctly and have set the `PICO_SDK_PATH` environment variable to point to this installation! 
+If the build fails, double check if you have installed the Pico C/C++ SDK correctly and have set the `PICO_SDK_PATH` environment variable to point to this installation!
 
 ## License 
 
