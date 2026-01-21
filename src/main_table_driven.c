@@ -72,6 +72,8 @@ static void app_init(void)
     gpio_set_dir(led_green, GPIO_OUT);
     
     /* Setup buttons */
+    gpio_init(go_btn);
+    gpio_init(stop_btn);
     gpio_set_irq_enabled_with_callback(go_btn, GPIO_IRQ_EDGE_FALL, true, &button_isr); 
     gpio_set_irq_enabled(stop_btn, GPIO_IRQ_EDGE_FALL, true); 
 

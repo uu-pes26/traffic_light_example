@@ -10,13 +10,13 @@ typedef enum _event {go_evt, stop_evt, timeout_evt, no_evt} evt_t;
 
 const static uint led_red = 0; 
 const static uint led_yellow = 1; 
-const static uint led_green = 2; 
+const static uint led_green = 2;
 
 const static uint go_btn = 20; 
 const static uint stop_btn = 21; 
 
 /* Event queue */
-queue_t evt_queue; 
+queue_t evt_queue;
 
 /* Last button ISR time */
 unsigned long button_time = 0;
@@ -57,13 +57,24 @@ static void app_init(void)
     /* Setup LEDs */
     gpio_init(led_red); 
     gpio_init(led_yellow); 
-    gpio_init(led_green);  
+    gpio_init(led_green); 
     gpio_set_dir(led_red, GPIO_OUT);
     gpio_set_dir(led_yellow, GPIO_OUT);
     gpio_set_dir(led_green, GPIO_OUT);
     
     /* Setup buttons */
-    gpio_set_irq_enabled_with_callback(go_btn, GPIO_IRQ_EDGE_FALL, true, button_isr); 
+    gpio_init(go_btn);
+    gpio_init(stop_btn);
+    /* Enable interrupt line shared by all GPIO pins */
+    irq_set_enabled(IO_IRQ_BANK0, true);
+    /* Set callback button_isr, triggered on any IRQs on that line*/
+    gpio_set_irq_callback(button_isr);
+    /* Trigger IRQs on falling edges on go_btn*/
+    gpio_set_irq_enabled(go_btn, GPIO_IRQ_EDGE_FALL, true); 
+    /* For convenience, the three methods above can be replaced by the method below*/
+    //gpio_set_irq_enabled_with_callback(go_btn, GPIO_IRQ_EDGE_FALL, true, button_isr); 
+
+    /* trigger IRQs on falling edges on stop_btn*/
     gpio_set_irq_enabled(stop_btn, GPIO_IRQ_EDGE_FALL, true); 
 
     /* Event queue setup */
